@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Gemini AI Calendar</title>
+    
+    <!-- iOS Specific Meta Tags for PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="AI Calendar">
+    <!-- Using favicon as placeholder for apple-touch-icon. ideally you should add a real png -->
+    <link rel="apple-touch-icon" href="/favicon.svg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+        overscroll-behavior: none; /* Prevent pull-to-refresh and bounce effects */
+        touch-action: pan-y; /* Disable horizontal swipe gestures (like browser back/forward) */
+        overflow: hidden; /* Lock body scroll */
+        -webkit-tap-highlight-color: transparent; /* Remove blue highlight on tap */
+        user-select: none; /* Feel more like an app */
+      }
+      /* Safe area padding for iPhones with notches */
+      header {
+        padding-top: env(safe-area-inset-top);
+      }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "firebase/": "https://aistudiocdn.com/firebase@^12.6.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
+    "vite": "https://aistudiocdn.com/vite@^7.2.4",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "vite-plugin-pwa": "https://aistudiocdn.com/vite-plugin-pwa@^1.1.0",
+    "date-fns": "https://aistudiocdn.com/date-fns@^4.1.0",
+    "firebase-functions/": "https://aistudiocdn.com/firebase-functions@^7.0.0/",
+    "firebase-admin": "https://aistudiocdn.com/firebase-admin@^13.6.0",
+    "@line/bot-sdk": "https://aistudiocdn.com/@line/bot-sdk@^10.5.0",
+    "stream": "https://aistudiocdn.com/stream@^0.0.3",
+    "express": "https://aistudiocdn.com/express@^5.1.0",
+    "buffer": "https://aistudiocdn.com/buffer@^6.0.3"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

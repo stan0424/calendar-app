@@ -1,0 +1,53 @@
+*** Begin Patch
+*** Update File: App.tsx
+@@
+-  const addEvent = async (event: Omit<CalendarEvent, 'id'>) => {
+-    try {
+-        await db.collection('events').add(event);
+-    } catch (error: any) {
+-        console.error("Error adding document: ", error);
+-        let msg = "Failed to add event to cloud database.";
+-        
+-        if (error.code === 'permission-denied') {
+-            msg += "\n�v�������C�нT�{ Firebase Console Authentication �w�ҥΡu�ΦW�n�J (Anonymous)�v�C";
+-        } else if (error.code === 'unavailable') {
+-             // Offline: Firestore cues it automatically, but sometimes throws if network is hard down initially
+-             return; 
+-        } else if (error.message) {
+-            msg += `\nError: ${error.message}`;
+-        }
+-        alert(msg);
+-    }
+-  };
++  const addEvent = async (event: Omit<CalendarEvent, 'id'>) => {
++    try {
++      // Ensure we are authenticated (works with rules requiring auth)
++      if (!auth.currentUser) {
++        try {
++          await auth.signInAnonymously();
++        } catch (authErr: any) {
++          console.error('Anonymous auth failed before add:', authErr);
++          const em = authErr?.message || 'Unknown auth error';
++          alert(`Failed to authenticate (anonymous).\n${em}`);
++          return;
++        }
++      }
++
++      await db.collection('events').add(event);
++    } catch (error: any) {
++      console.error('Error adding document:', error);
++      let msg = 'Failed to add event to cloud database.';
++
++      if (error?.code === 'permission-denied') {
++        msg += '\nPermission denied. Check Firestore rules and that Anonymous sign-in is enabled.';
++      } else if (error?.code === 'unavailable') {
++        // Offline: Firestore usually queues, but initial hard-down can throw
++        return;
++      }
++
++      if (error?.code) msg += `\ncode: ${error.code}`;
++      if (error?.message) msg += `\nmessage: ${error.message}`;
++      alert(msg);
++    }
++  };
+*** End Patch

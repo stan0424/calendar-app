@@ -1,0 +1,297 @@
+starting build "5bc28f87-c296-4840-bf65-3814226c46b7"
+FETCHSOURCE
+BUILD
+Starting Step #0 - "fetch"
+Pulling image: us-central1-docker.pkg.dev/serverless-runtimes/utilities/gcs-fetcher:base_20251101_18_04_RC00
+base_20251101_18_04_RC00: Pulling from serverless-runtimes/utilities/gcs-fetcher
+Digest: sha256:11341dd66c2aa5f08de651640e22866732053f893f51f30385224a8d28fd853f
+Status: Downloaded newer image for us-central1-docker.pkg.dev/serverless-runtimes/utilities/gcs-fetcher:base_20251101_18_04_RC00
+us-central1-docker.pkg.dev/serverless-runtimes/utilities/gcs-fetcher:base_20251101_18_04_RC00
+Fetching archive gs://gcf-v2-sources-720456130428-us-central1/lineWebhook/function-source.zip.
+******************************************************
+Status:                      SUCCESS
+Started:                     2025-11-26T07:36:57Z
+Completed:                   2025-11-26T07:36:57Z
+Total files:            7
+MiB downloaded:         0.05 MiB
+MiB/s throughput:       0.69 MiB/s
+Time for zipfile:       0.08 s
+Time to unzip:          0.00 s
+Total time:             0.08 s
+******************************************************
+Finished Step #0 - "fetch"
+Starting Step #1 - "pre-buildpack"
+Pulling image: us-central1-docker.pkg.dev/serverless-runtimes/google-22-full/builder/nodejs:nodejs_20251109_RC00
+nodejs_20251109_RC00: Pulling from serverless-runtimes/google-22-full/builder/nodejs
+828c1365039a: Already exists
+637d3a8ce607: Already exists
+981def9c0bac: Already exists
+2a6cd3f097a1: Pulling fs layer
+8dea029db3dd: Pulling fs layer
+47a6f7fef53b: Pulling fs layer
+3c75b06a95d3: Pulling fs layer
+b17ee862bd5f: Pulling fs layer
+61c448f589e1: Pulling fs layer
+fe0a88c014e5: Pulling fs layer
+1a82443b3661: Pulling fs layer
+8d5311fdb4ef: Pulling fs layer
+09d88f4e3b55: Pulling fs layer
+a136af9f6976: Pulling fs layer
+17f148e8e19c: Pulling fs layer
+db60bd3c00fd: Pulling fs layer
+8696b0a9cc57: Pulling fs layer
+c160999a5684: Pulling fs layer
+37fe714395ca: Pulling fs layer
+ae95114355a1: Pulling fs layer
+c5545608283b: Pulling fs layer
+1f02e356c100: Pulling fs layer
+61c448f589e1: Waiting
+fe0a88c014e5: Waiting
+1a82443b3661: Waiting
+8d5311fdb4ef: Waiting
+09d88f4e3b55: Waiting
+a136af9f6976: Waiting
+17f148e8e19c: Waiting
+db60bd3c00fd: Waiting
+8696b0a9cc57: Waiting
+c160999a5684: Waiting
+4490c29092de: Pulling fs layer
+93e1801e0569: Pulling fs layer
+66b976a1689d: Pulling fs layer
+529809bd38af: Pulling fs layer
+f856b0583f28: Pulling fs layer
+26be9f471823: Pulling fs layer
+34ce8ba30961: Pulling fs layer
+e6178d2c0976: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+37fe714395ca: Waiting
+ae95114355a1: Waiting
+c5545608283b: Waiting
+1f02e356c100: Waiting
+4490c29092de: Waiting
+93e1801e0569: Waiting
+66b976a1689d: Waiting
+529809bd38af: Waiting
+f856b0583f28: Waiting
+26be9f471823: Waiting
+34ce8ba30961: Waiting
+e6178d2c0976: Waiting
+4f4fb700ef54: Waiting
+47a6f7fef53b: Verifying Checksum
+47a6f7fef53b: Download complete
+3c75b06a95d3: Verifying Checksum
+3c75b06a95d3: Download complete
+8dea029db3dd: Verifying Checksum
+8dea029db3dd: Download complete
+2a6cd3f097a1: Verifying Checksum
+2a6cd3f097a1: Download complete
+b17ee862bd5f: Verifying Checksum
+b17ee862bd5f: Download complete
+61c448f589e1: Verifying Checksum
+61c448f589e1: Download complete
+fe0a88c014e5: Verifying Checksum
+fe0a88c014e5: Download complete
+09d88f4e3b55: Verifying Checksum
+09d88f4e3b55: Download complete
+8d5311fdb4ef: Verifying Checksum
+8d5311fdb4ef: Download complete
+db60bd3c00fd: Verifying Checksum
+db60bd3c00fd: Download complete
+17f148e8e19c: Verifying Checksum
+17f148e8e19c: Download complete
+a136af9f6976: Verifying Checksum
+a136af9f6976: Download complete
+2a6cd3f097a1: Pull complete
+1a82443b3661: Verifying Checksum
+1a82443b3661: Download complete
+8dea029db3dd: Pull complete
+c160999a5684: Verifying Checksum
+c160999a5684: Download complete
+ae95114355a1: Verifying Checksum
+ae95114355a1: Download complete
+8696b0a9cc57: Verifying Checksum
+8696b0a9cc57: Download complete
+1f02e356c100: Verifying Checksum
+1f02e356c100: Download complete
+c5545608283b: Verifying Checksum
+c5545608283b: Download complete
+37fe714395ca: Verifying Checksum
+37fe714395ca: Download complete
+47a6f7fef53b: Pull complete
+26be9f471823: Verifying Checksum
+26be9f471823: Download complete
+f856b0583f28: Verifying Checksum
+f856b0583f28: Download complete
+66b976a1689d: Verifying Checksum
+66b976a1689d: Download complete
+529809bd38af: Verifying Checksum
+529809bd38af: Download complete
+93e1801e0569: Verifying Checksum
+93e1801e0569: Download complete
+4490c29092de: Verifying Checksum
+4490c29092de: Download complete
+34ce8ba30961: Verifying Checksum
+34ce8ba30961: Download complete
+e6178d2c0976: Verifying Checksum
+e6178d2c0976: Download complete
+3c75b06a95d3: Pull complete
+4f4fb700ef54: Verifying Checksum
+4f4fb700ef54: Download complete
+b17ee862bd5f: Pull complete
+61c448f589e1: Pull complete
+fe0a88c014e5: Pull complete
+1a82443b3661: Pull complete
+8d5311fdb4ef: Pull complete
+09d88f4e3b55: Pull complete
+a136af9f6976: Pull complete
+17f148e8e19c: Pull complete
+db60bd3c00fd: Pull complete
+8696b0a9cc57: Pull complete
+c160999a5684: Pull complete
+37fe714395ca: Pull complete
+ae95114355a1: Pull complete
+c5545608283b: Pull complete
+1f02e356c100: Pull complete
+4490c29092de: Pull complete
+93e1801e0569: Pull complete
+66b976a1689d: Pull complete
+529809bd38af: Pull complete
+f856b0583f28: Pull complete
+26be9f471823: Pull complete
+34ce8ba30961: Pull complete
+e6178d2c0976: Pull complete
+4f4fb700ef54: Pull complete
+Digest: sha256:d88fba8b37e4633c2732bdd29676af0a0ec063a6729ab726085f607e0f0203a3
+Status: Downloaded newer image for us-central1-docker.pkg.dev/serverless-runtimes/google-22-full/builder/nodejs:nodejs_20251109_RC00
+us-central1-docker.pkg.dev/serverless-runtimes/google-22-full/builder/nodejs:nodejs_20251109_RC00
+Preparing directory /layers
+Preparing directory /workspace
+Preparing directory /builder/home
+Preparing directory /builder/outputs
+Preparing directory /platform/env
+Passing build environment variable BUILDER_OUTPUT to buildpacks
+Passing build environment variable GOOGLE_RUNTIME to buildpacks
+Passing build environment variable GOOGLE_LABEL_BUILDER_VERSION to buildpacks
+Passing build environment variable GOOGLE_LABEL_BUILDER_IMAGE to buildpacks
+Passing build environment variable GOOGLE_LABEL_RUN_IMAGE to buildpacks
+Passing build environment variable GOOGLE_LABEL_SOURCE to buildpacks
+Passing build environment variable GOOGLE_USE_SERVERLESS_RUNTIMES_TARBALLS to buildpacks
+Passing build environment variable GOOGLE_RUNTIME_IMAGE_REGION to buildpacks
+Passing build environment variable GOOGLE_RUNTIME_VERSION to buildpacks
+Passing build environment variable X_GOOGLE_SKIP_RUNTIME_LAUNCH to buildpacks
+Passing build environment variable GOOGLE_BUILD_ENV to buildpacks
+Passing build environment variable GOOGLE_FUNCTION_TARGET to buildpacks
+Passing build environment variable GOOGLE_FUNCTION_SIGNATURE_TYPE to buildpacks
+Passing build environment variable X_GOOGLE_TARGET_PLATFORM to buildpacks
+Passing build environment variable GOOGLE_LABEL_BUILD_ID to buildpacks
+Passing build environment variable GOOGLE_LABEL_BASE_IMAGE to buildpacks
+Passing build environment variable GOOGLE_LABEL_FUNCTION_TARGET to buildpacks
+Passing build environment variable X_GOOGLE_SET_NODE_HEAP_SIZE to buildpacks
+Passing build environment variable GOOGLE_NODE_RUN_SCRIPTS to buildpacks
+Checking if image us-central1-docker.pkg.dev/calender-5e145/gcf-artifacts/calender--5e145__us--central1__line_webhook/cache:latest exists
+Image us-central1-docker.pkg.dev/calender-5e145/gcf-artifacts/calender--5e145__us--central1__line_webhook/cache:latest does not exist
+WARNING: Failed to reuse previous cache image; will not affect current build: image us-central1-docker.pkg.dev/calender-5e145/gcf-artifacts/calender--5e145__us--central1__line_webhook/cache:latest does not exist
+Finished Step #1 - "pre-buildpack"
+Starting Step #2 - "build"
+Already have image (with digest): us-central1-docker.pkg.dev/serverless-runtimes/google-22-full/builder/nodejs:nodejs_20251109_RC00
+===> ANALYZING
+Image with name "us-central1-docker.pkg.dev/calender-5e145/gcf-artifacts/calender--5e145__us--central1__line_webhook:latest" not found
+===> DETECTING
+target distro name/version labels not found, reading /etc/os-release file
+google.nodejs.runtime             1.0.0
+google.utils.archive-source       0.0.1
+google.nodejs.npm                 1.1.0
+google.nodejs.functions-framework 0.9.4
+google.config.entrypoint          0.9.0
+google.utils.label-image          0.0.2
+===> RESTORING
+Layer cache not found
+===> BUILDING
+target distro name/version labels not found, reading /etc/os-release file
+=== Node.js - Runtime (google.nodejs.runtime@1.0.0) ===
+Using runtime version from GOOGLE_RUNTIME_VERSION: 20.19.5
+Using exact version 20.19.5 for Node.js
+***** CACHE MISS: "nodejs"
+Installing Node.js v20.19.5.
+Runtime successfully downloaded from us-central1-docker.pkg.dev/serverless-runtimes/runtimes-ubuntu2204/nodejs:20.19.5
+Installing the heapsize.sh exec.d script.
+=== Utils - Archive Source (google.utils.archive-source@0.0.1) ===
+Adding image label google.source-archive: /workspace/.googlebuild/source-code.tar.gz
+=== Node.js - Npm (google.nodejs.npm@1.1.0) ===
+***** CACHE MISS: "npm_modules"
+Installing application dependencies.
+--------------------------------------------------------------------------------
+Running "npm ci --quiet --no-fund --no-audit (NODE_ENV=production)"
+npm error code ERESOLVE
+npm error ERESOLVE could not resolve
+npm error
+npm error While resolving: @modelcontextprotocol/sdk@1.23.0
+npm error Found: @cfworker/json-schema@1.12.8
+npm error node_modules/@cfworker/json-schema
+npm error   @cfworker/json-schema@"^1.12.0" from the root project
+npm error
+npm error Could not resolve dependency:
+npm error peerOptional @cfworker/json-schema@"^4.1.1" from @modelcontextprotocol/sdk@1.23.0
+npm error node_modules/@modelcontextprotocol/sdk
+npm error   @modelcontextprotocol/sdk@"^1.0.1" from the root project
+npm error   peerOptional @modelcontextprotocol/sdk@"^1.20.1" from @google/genai@1.30.0
+npm error   node_modules/@google/genai
+npm error     @google/genai@"*" from the root project
+npm error
+npm error Conflicting peer dependency: @cfworker/json-schema@4.1.1
+npm error node_modules/@cfworker/json-schema
+npm error   peerOptional @cfworker/json-schema@"^4.1.1" from @modelcontextprotocol/sdk@1.23.0
+npm error   node_modules/@modelcontextprotocol/sdk
+npm error     @modelcontextprotocol/sdk@"^1.0.1" from the root project
+npm error     peerOptional @modelcontextprotocol/sdk@"^1.20.1" from @google/genai@1.30.0
+npm error     node_modules/@google/genai
+npm error       @google/genai@"*" from the root project
+npm error
+npm error Fix the upstream dependency conflict, or retry
+npm error this command with --force or --legacy-peer-deps
+npm error to accept an incorrect (and potentially broken) dependency resolution.
+npm error
+npm error
+npm error For a full report see:
+npm error /www-data-home/.npm/_logs/2025-11-26T07_37_13_300Z-eresolve-report.txt
+npm error A complete log of this run can be found in: /www-data-home/.npm/_logs/2025-11-26T07_37_13_300Z-debug-0.log
+Done "npm ci --quiet --no-fund --no-audit (NODE_ENV=production)" (857.479841ms)
+--------------------------------------------------------------------------------
+failed to build: (error ID: 7fa33aaa):
+npm error code ERESOLVE
+npm error ERESOLVE could not resolve
+npm error
+npm error While resolving: @modelcontextprotocol/sdk@1.23.0
+npm error Found: @cfworker/json-schema@1.12.8
+npm error node_modules/@cfworker/json-schema
+npm error   @cfworker/json-schema@"^1.12.0" from the root project
+npm error
+npm error Could not resolve dependency:
+npm error peerOptional @cfworker/json-schema@"^4.1.1" from @modelcontextprotocol/sdk@1.23.0
+npm error node_modules/@modelcontextprotocol/sdk
+npm error   @modelcontextprotocol/sdk@"^1.0.1" from the root project
+npm error   peerOptional @modelcontextprotocol/sdk@"^1.20.1" from @google/genai@1.30.0
+npm error   node_modules/@google/genai
+npm error     @google/genai@"*" from the root project
+npm error
+npm error Conflicting peer dependency: @cfworker/json-schema@4.1.1
+npm error node_modules/@cfworker/json-schema
+npm error   peerOptional @cfworker/json-schema@"^4.1.1" from @modelcontextprotocol/sdk@1.23.0
+npm error   node_modules/@modelcontextprotocol/sdk
+npm error     @modelcontextprotocol/sdk@"^1.0.1" from the root project
+npm error     peerOptional @modelcontextprotocol/sdk@"^1.20.1" from @google/genai@1.30.0
+npm error     node_modules/@google/genai
+npm error       @google/genai@"*" from the root project
+npm error
+npm error Fix the upstream dependency conflict, or retry
+npm error this command with --force or --legacy-peer-deps
+npm error to accept an incorrect (and potentially broken) dependency resolution.
+npm error
+npm error
+npm error For a full report see:
+npm error /www-data-home/.npm/_logs/2025-11-26T07_37_13_300Z-eresolve-report.txt
+npm error A complete log of this run can be found in: /www-data-home/.npm/_logs/2025-11-26T07_37_13_300Z-debug-0.log
+ERROR: failed to build: exit status 1
+Finished Step #2 - "build"
+ERROR
+ERROR: build step 2 "us-central1-docker.pkg.dev/serverless-runtimes/google-22-full/builder/nodejs:nodejs_20251109_RC00" failed: step exited with non-zero status: 51

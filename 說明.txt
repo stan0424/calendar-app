@@ -1,0 +1,160 @@
+• 結論與實作狀態
+
+  - 我已先完成「不需第三方 API」的第一階段：
+      - 對「接機（入境）」顯示預定抵達的倒數時間（以行程時間為準）；目前未含即時延誤，顯示文案會註明是預定時間。
+      - 若你的行程描述裡同時有多個上車地點，會在地點區塊後方自動列出「上車地址1、上車地址2…」並可點擊開地圖（簡易版本，
+        從描述中抓取「上車地址：」後的多個地點，以頓號/逗號/分號/斜線拆分）。
+  - 變更檔案
+      - components/EventDetailModal.tsx: 新增航班快訊卡片（座落在時間區塊上方），並在地點區塊後顯示多上車地址（簡易版，
+        基於描述拆字串）。
+
+  即時航班延誤／航廈資訊是否需要 API？要錢嗎？
+
+  - 航廈（Terminal）對應：對桃園機場可用「航空公司→航廈」的靜態表（已內建常見航空）。這個不需要 API 或費用，但仍有少數 航
+    班例外或變更，屬「推測」。
+  - 即時延誤/實際落地時間：要。需要查「航班動態 API」。常見方案：
+      - Aviationstack（有免費層，但即時狀態與可靠度有限；進階/商用需付費）
+      - AeroDataBox（有免費/低額度方案，延誤與實際時間需看方案）
+      - FlightAware（AeroAPI，付費，資料完整）
+      - FlightStats（付費）
+      - 台灣機場/CAA資料：多為即時看板或查詢頁，穩定可用的官方開放 API 限制較多，不一定能直接抓。
+  - 建議做法
+      - 先上線現在的離線版（已完成）。
+      - 若你要「真的顯示延誤/實際抵達」：我可以再加一個可選的外部提供者（例如 AeroDataBox 或 Aviationstack），在設定畫面
+        放 API Key 欄位，填了才去查；預設不查（零成本）。
+
+  如何使用（你端）
+
+  - 現在就可以在網頁版點開含航班資訊的行程：會看到
+      - 航班：TR897（入境/出境）
+      - 桃園機場航廈：第一航廈/第二航廈（有對應時顯示）
+      - 倒數文案（接機才顯示，依預定時間）
+      - 下面地點欄位會列主上車位置，若描述內還有其他上車地點，會追加上車地址1/2…可點擊開地圖。
+  - LINE 端：此為前端顯示強化，資料仍來自現有描述模板；效果同樣會顯示在網頁端的詳細視窗。
+
+  下一步選項
+
+  - 要不要加「即時航班延誤/落地時間」？
+      - 可以，我會：
+          - 在 Settings 增加「航班 API 供應商 + API Key」設定。
+          - 詳情卡片顯示「是否延誤、預計/實際落地時間」，如果無法取得就退回預定時間。
+      - 成本：依你選的供應商為準（多數有免費層試用，但頻率/即時性有限）。
+  - 航廈對應表要不要做成完整清單？
+      - 我可以把桃園機場官網的航空公司分佈整理成表（更準確），也可針對你常見的航空擴充與覆蓋。
+
+  要我把第二階段（接航班 API）也一起接上嗎？你若有偏好的供應商或 API Key，我就直接加設定、接上並部署。
+
+
+› 像有一款app叫飛常准它都是免費的又都能查到即時動態連飛機臨時調度換航廈都查的到要怎麼搞
+
+
+• 可以，但要分清「資料來源和授權」。像「飛常准」App 對一般使用者免費，是因為它們自己有付費資料來源/合作，但對外提供給
+  第三方服務（我們的網站/LINE Bot）通常需要走官方 API 授權，不能直接抓 App 的資料或螢幕爬蟲，否則違反服務條款，也容易
+  不穩。
+
+  可行方案（由合法 API 實作即時航班）
+
+  - 合法資料源（擇一/多選，依預算與品質）
+      - VariFlight（飛常准）企業版 API：商用授權，品質高，費用需洽談。
+      - FlightAware AeroAPI、Cirium/FlightStats：商用，品質高，付費。
+      - AeroDataBox、Aviationstack：有免費/低額度方案，能查航班即時/預估，限制較多但能先做 MVP。
+      - 開放替代：OpenSky（側重飛行位置 ADS‑B，不一定有航廈與班表），或各機場開放資料（若有官方 JSON feed）。
+  - 建議做法
+      - 先接「AeroDataBox（或 Aviationstack）」做 MVP（免費層足夠驗證），之後若你要和「飛常准」簽正式 API 再切換
+        Provider 即可。
+
+  要加的功能與落地方式
+
+  - 功能
+      - 在行程詳情顯示：實際/預估起降時間、是否延誤、航廈/登機門（到達門/行李轉盤如有）、即時倒數。
+      - 自動判斷接機/送機（已完成）＋ 將「航班編號」與「機場 IATA（如 TPE）」納入結構化欄位。
+      - 多上車地點：展開詳情時自動列出「上車地址1、上車地址2…」（已加簡易版；目前從描述「上車地址：」後拆多筆顯示並可點
+        地圖）。
+  - 架構（前端 + 雲端 Functions）
+      - 前端
+          - types 擴充 CalendarEvent：flightNo、airportCode、scheduled/estimated 兩組時間、status、terminal、gate、
+            baggage、provider、lastChecked、delayMinutes。
+          - EventDetailModal：顯示航班卡片（已加「接機倒數」與「航廈推測」；接上 API 後改用即時資料）。
+          - SettingsModal：新增「航班資料 Provider + API Key」設定，沒填就不查。
+      - 後端（Cloud Functions）
+          - 新增 flight status 查詢雲端端點（統一代理外部 API，避免前端曝 Key）。
+          - 在建立/更新事件時若解析到航班編號＋日期，寫一起程附加欄位 flightNo/airportCode，並排程靠近起飛/抵達前 6 小時
+            每 10 分鐘刷新（Cloud Scheduler + Pub/Sub）。
+          - 現有流程建立事件後，雲端就會抓一次即時狀態回填欄位；前端再顯示。
+  - 成本/配額
+      - 航班 API 依供應商而定：免費層常有每分鐘/每日次數限制、延誤資料可能受限。做法是「詳情打開時才查 1 次」＋「起飛/抵
+        達前一定時窗定時刷新」；其餘時間不打。
+      - 先用 AeroDataBox/Aviationstack 做 MVP（免費 Key），日後再切換 VariFlight/FlightAware 以提升品質與覆蓋。
+
+  我可以怎麼幫你落地（建議步驟）
+
+  1. Model 擴充
+      - 修改 types.ts：加 flightNo、airportCode、scheduled/estimated、status、terminal、gate 等欄位。
+  2. 設定面板
+      - SettingsModal：新增 provider 選擇（aerodatabox/aviationstack/custom）與 API Key 欄位。
+  3. 後端 Provider 封裝
+      - functions/src/services/flightProvider.ts：定義 IFlightProvider 介面 + AeroDataBox/Aviationstack 實作。
+      - functions/src/index.ts 加一支 HTTPS callable/REST：/flight/status?flight=TR897&date=2025-11-25&airport=TPE
+      - 建立/更新事件時若抓到航班編號，寫入欄位並呼叫一次查詢；近窗期用 Scheduler 刷新。
+  4. 前端顯示
+      - EventDetailModal：若有 flightStatus 就用「estimated/scheduled + status + terminal/gate」，顯示倒數與延誤分鐘；沒
+        有就退回預定時間（你現在看到的狀況）。
+  5. 控制配額
+      - 雲端加快取（一定時間內重複查同航班/同日期直接回快取）。
+
+  關於「飛常准」
+
+  - 他們的 App 對使用者免費，不等於提供免費的對外 API。若你要用到它的「臨時調度換航廈、即時延誤」等完整能力，通常要跟
+    VariFlight 正式簽約拿企業 API。
+  - 若你最後決定接 VariFlight，我可以先做「Provider 抽象」與免費方案串接，等你拿到 VariFlight Key 後我直接把 provider 切
+    換到 VariFlight，不動 UI 與資料結構。
+
+  你要我先用哪個免費方案做 MVP？
+
+  - AeroDataBox 或 Aviationstack 都可以。給我其中一個 API Key，我今天就幫你：
+      - 擴充欄位 + Provider 封裝 + 後端查詢端點 + 前端顯示更新
+      - 設定面板可輸入/替換 Key
+      - 先做「詳情打開即時查詢一次」版本（最省配額）；若你要定時刷新我再加 Scheduler
+
+  另外，我已在詳情頁：
+
+  - 加了航班辨識（航廈推測、接機倒數，基於預定時間，不含即時）。
+  - 加了多上車地點的簡易顯示（從描述「上車地址：」後拆多筆列出並可點地圖）。
+
+• 可以做，而且不一定要整合付費 API。做法是把「航班號」渲染成可點連結，連到會自動喚起 App 的 H5/Universal Link；若沒安裝
+  App，就落回相同頁面的網頁版。
+
+  可行連結策略
+
+  - 優先嘗試 VariFlight 的 H5/Universal Link（App 裝了會直接開 App，沒裝就開網頁）：
+      - 候選模板（你可測哪個能開 App）：
+          - https://h5.variflight.com/flight/fnum/{flightNo}
+          - https://m.variflight.com/flight/fnum/{flightNo}
+          - https://www.variflight.com/flight/fnum/{flightNo}
+  - 若上面無法喚起 App，退回搜尋落地（通常也會觸發 App Universal Link）：
+      - https://h5.variflight.com/search?key={flightNo}
+      - https://www.google.com/search?q=航班%20{flightNo}
+  - Android 專用 intent 方案（進階，僅當你確認套件名時使用）：
+      - intent://flight/{flightNo}#Intent;scheme=https;package={變更為飛常准的套件名};end
+      - 套件名需查 Play 商店的 package 或用裝置工具確認，否則不要用這招。
+
+  建議實作方式（不綁死供應商）
+
+  - 在設定新增「航班連結模板」字串，預設用 Google 搜尋：
+      - 預設：https://www.google.com/search?q=航班%20{flightNo}
+      - 你可以把它改成上面的 VariFlight H5 模板，例如：https://h5.variflight.com/flight/fnum/{flightNo}
+  - 詳情彈窗偵測到航班號後，顯示成可點超連結：
+      - 連結 = 模板.replace('{flightNo}', 偵測到的航班號)
+      - iOS/Android 若裝了 App 且該域名有 Universal Link/Applinks 設定，會直接跳 App；否則停在網頁，仍可查詢，不用再
+        輸入。
+
+  成本與維護
+
+  - 不用 API、不用錢：只靠 H5/Universal Link。
+  - 供應商若改了 H5 路徑，你只要在設定改模板即可，不用改程式碼。
+
+  要不要我直接幫你做
+
+  - 我可以很快把「航班連結模板」加到設定，並在詳情彈窗把航班號渲染成超連結（預設 Google 搜尋，並附一鍵改成 VariFlight H5
+    的按鈕）。你只要告訴我是否現在就改，我就直接補上並部署。
+  - 若你已經知道實測能喚起 App 的 VariFlight H5 連結，直接給我模板（含 {flightNo} 佔位），我就設為預設值。

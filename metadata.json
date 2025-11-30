@@ -1,0 +1,7 @@
+{
+  "name": "Gemini AI Calendar",
+  "description": "An intelligent calendar application that mimics Google Calendar's interface. It allows users to create events by conversing with an AI using text, voice, or images, powered by the Gemini API.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
