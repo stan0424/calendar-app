@@ -49,7 +49,22 @@ const TextWithSmartLinks: React.FC<{ text: string }> = ({ text }) => {
 
   const markdownLinkRegex = /\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g;
   const urlRegex = /(https?:\/\/[^\s)]+)/g;
-  const phoneRegex = /((?:\b09\d{2}(?:-?\d{3}-?\d{3}|\d{6})\b)|(?:\b0\d{1,2}-?\d{3,4}-?\d{4}\b))/g;
+  const phoneRegex =
+    /((?:\+|00)\d{1,3}[-\s]?\d{1,4}[-\s]?\d{3,4}[-\s]?\d{3,4}|\b09\d{2}(?:-?\d{3}-?\d{3}|\d{6})\b|\b0\d{1,2}-?\d{3,4}-?\d{4}\b|\b8869\d{7,8}\b)/g;
+
+  const normalizePhoneNumber = (value: string) => {
+    const trimmed = value.trim();
+    const hasPlus = trimmed.startsWith('+');
+    let digitsOnly = trimmed.replace(/[^\d]/g, '');
+    if (!digitsOnly) return null;
+    if (hasPlus) {
+      return `+${digitsOnly}`;
+    }
+    if (digitsOnly.startsWith('00')) {
+      return `+${digitsOnly.slice(2)}`;
+    }
+    return digitsOnly;
+  };
 
   return (
     <>
@@ -83,11 +98,15 @@ const TextWithSmartLinks: React.FC<{ text: string }> = ({ text }) => {
                                <React.Fragment key={`inner-${urlIndex}`}>
                                    {phoneParts.map((phonePart, phoneIndex) => {
                                        if (phoneIndex % 2 === 1) {
-                                           return (
-                                               <a key={`phone-${phoneIndex}`} href={`tel:${phonePart.replace(/-/g, '')}`} className="text-blue-600 hover:underline">
-                                                   {phonePart}
-                                               </a>
-                                           );
+                                           const normalized = normalizePhoneNumber(phonePart);
+                                           if (normalized && normalized.replace(/[^\d]/g, '').length >= 6) {
+                                               return (
+                                                   <a key={`phone-${phoneIndex}`} href={`tel:${normalized}`} className="text-blue-600 hover:underline">
+                                                       {phonePart}
+                                                   </a>
+                                               );
+                                           }
+                                           return phonePart;
                                        }
                                        return phonePart;
                                    })}
