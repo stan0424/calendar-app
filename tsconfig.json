@@ -28,6 +28,7 @@
   },
   "exclude": [
     "functions",
-    "components/LoginScreen.tsx"
+    "components/LoginScreen.tsx",
+    "calendar-app1"
   ]
 }

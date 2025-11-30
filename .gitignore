@@ -13,6 +13,7 @@ dist-ssr
 *.local
 *.zip
 *.rar
+calendar-app1/
 
 # Editor directories and files
 .vscode/*

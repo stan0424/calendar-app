@@ -336,6 +336,10 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
   const descriptionWithMidStops = useMemo(() => {
     const raw = event.description || '';
     const lines = raw ? raw.split(/\n+/) : [];
+    const hasManualMidLine = lines.some(line => /^\s*中途停靠[:：]/.test(line));
+    if (hasManualMidLine) {
+      return raw;
+    }
 
     const ensureAfter = (idx: number) => {
       if (idx === -1) return -1;
@@ -417,11 +421,11 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
     setTitle(event.title);
     setStart(format(event.startTime, "yyyy-MM-dd'T'HH:mm"));
     setEnd(format(event.endTime, "yyyy-MM-dd'T'HH:mm"));
-    setDescription(event.description || '');
+    setDescription(descriptionWithMidStops || '');
     setLocation(event.location || '');
     setAllDay(event.allDay);
     setIsEditing(false); // Reset editing mode when event changes
-  }, [event]);
+  }, [event, descriptionWithMidStops]);
 
   const handleSave = () => {
     onUpdate(event.id, {
