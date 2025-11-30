@@ -51,24 +51,106 @@ const TextWithSmartLinks: React.FC<{ text: string }> = ({ text }) => {
   const urlRegex = /(https?:\/\/[^\s)]+)/g;
   const phoneRegex =
     /((?:\+|00)\d{1,3}[-\s]?\d{1,4}[-\s]?\d{3,4}[-\s]?\d{3,4}|\b09\d{2}(?:-?\d{3}-?\d{3}|\d{6})\b|\b0\d{1,2}-?\d{3,4}-?\d{4}\b|\b8869\d{7,8}\b)/g;
+  const addressLabelRegex =
+    /^\s*(上車地址|下車地址|中途停靠|集合地點|集合地址|司機地址|乘客地址|終點地址|起點地址|地址|地點)[:：]\s*(.+)$/i;
+  const phoneLabelRegex =
+    /^\s*((?:聯絡|乘客|司機|客服|報到)?(?:電話|tel|phone)|聯絡電話|Contact|TEL)[:：]\s*(.+)$/i;
 
   const normalizePhoneNumber = (value: string) => {
     const trimmed = value.trim();
+    if (!trimmed) return null;
     const hasPlus = trimmed.startsWith('+');
     let digitsOnly = trimmed.replace(/[^\d]/g, '');
     if (!digitsOnly) return null;
     if (hasPlus) {
       return `+${digitsOnly}`;
     }
-    if (digitsOnly.startsWith('00')) {
+    if (digitsOnly.startsWith('00') && digitsOnly.length > 2) {
       return `+${digitsOnly.slice(2)}`;
     }
+    if (digitsOnly.startsWith('886')) {
+      return `+${digitsOnly}`;
+    }
     return digitsOnly;
+  };
+
+  const renderAddressLine = (label: string, body: string, key: React.Key) => {
+    const addresses = body
+      .split(/[、，,；;\/]/)
+      .map(s => s.trim())
+      .filter(Boolean);
+    if (addresses.length === 0) {
+      return (
+        <p key={key}>
+          {label}：—
+        </p>
+      );
+    }
+    return (
+      <p key={key}>
+        {label}：
+        {addresses.map((addr, idx) => {
+          const href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr)}`;
+          return (
+            <React.Fragment key={`${key}-${idx}`}>
+              <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                {addr}
+              </a>
+              {idx < addresses.length - 1 ? '、' : null}
+            </React.Fragment>
+          );
+        })}
+      </p>
+    );
+  };
+
+  const renderPhoneLine = (label: string, body: string, key: React.Key) => {
+    const numbers = body
+      .split(/[、，,；;\/]/)
+      .map(s => s.trim())
+      .filter(Boolean);
+    if (!numbers.length) {
+      return (
+        <p key={key}>
+          {label}：—
+        </p>
+      );
+    }
+    return (
+      <p key={key}>
+        {label}：
+        {numbers.map((num, idx) => {
+          const normalized = normalizePhoneNumber(num);
+          const content = normalized ? (
+            <a href={`tel:${normalized}`} className="text-blue-600 hover:underline">
+              {num}
+            </a>
+          ) : (
+            num
+          );
+          return (
+            <React.Fragment key={`${key}-ph-${idx}`}>
+              {content}
+              {idx < numbers.length - 1 ? '、' : null}
+            </React.Fragment>
+          );
+        })}
+      </p>
+    );
   };
 
   return (
     <>
       {text.split('\n').map((line, lineIndex) => {
+        const trimmedLine = line.trim();
+        const addressMatch = trimmedLine.match(addressLabelRegex);
+        if (addressMatch) {
+          return renderAddressLine(addressMatch[1], addressMatch[2], `addr-${lineIndex}`);
+        }
+        const phoneMatch = trimmedLine.match(phoneLabelRegex);
+        if (phoneMatch) {
+          return renderPhoneLine(phoneMatch[1], phoneMatch[2], `phone-${lineIndex}`);
+        }
         const mdParts = line.split(markdownLinkRegex);
         return (
           <React.Fragment key={lineIndex}>
